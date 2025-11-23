@@ -1,0 +1,6 @@
+@GlobalChildrensApi_HostAddress = http://localhost:5224
+
+GET {{GlobalChildrensApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
