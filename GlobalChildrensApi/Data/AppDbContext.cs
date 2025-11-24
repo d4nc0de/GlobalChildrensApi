@@ -12,6 +12,7 @@ namespace GlobalChildrensApi.Data
         }
 
         public DbSet<Sede> sede => Set<Sede>();
+        public DbSet<Aula> aula => Set<Aula>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
