@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GlobalChildrensApi.Controllers
 {
+    //base
     [ApiController]
     [Route("api/[controller]")]
     //[Authorize] // Usa el JWT de Supabase
