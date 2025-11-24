@@ -4,7 +4,7 @@ namespace GlobalChildrensApi.Models
 {
     public class TipoDocumento
     {
-        public long TipoDocumentoId { get; set; }
+        public long tipodocumentoid { get; set; }
         public string codigo { get; set; } = string.Empty;
         public string nombre { get; set; } = string.Empty;
         public string estado { get; set; } = "ACT";

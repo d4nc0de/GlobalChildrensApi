@@ -4,7 +4,7 @@ namespace GlobalChildrensApi.Models
 {
     public class ComponenteNota
     {
-        public long ComponenteNotaId { get; set; }
+        public long componentenotaid { get; set; }
         public string nombre { get; set; } = string.Empty;
         public decimal porcentaje { get; set; }
         public bool activo { get; set; }
