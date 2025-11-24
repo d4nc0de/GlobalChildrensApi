@@ -65,7 +65,7 @@ namespace GlobalChildrensApi.Controllers
         }
 
         [HttpGet("ObtenerAsistenciaEstudiante/{idestudiante:long}")]
-        public async Task<ActionResult<Aula>> GetAsistenciaByEstudiante(long idestudiante)
+        public async Task<ActionResult<AsistenciaEstudiante>> GetAsistenciaByEstudiante(long idestudiante)
         {
             try
             {

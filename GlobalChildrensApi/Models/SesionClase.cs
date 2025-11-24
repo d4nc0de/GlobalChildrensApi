@@ -15,7 +15,7 @@ namespace GlobalChildrensApi.Models
         public string estado { get; set; } = "ACT";
         public long tutorid { get; set; }
         public long aulaid { get; set; }
-        public long calendariosemenalprogramaid { get; set; }
+        public long calendariosemanalprogramaid { get; set; }
         public long? motivonoclaseid { get; set; }
         public long? festivoid { get; set; }
         public long? sesionrepuestaid { get; set; }

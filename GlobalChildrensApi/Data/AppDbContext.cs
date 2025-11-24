@@ -18,6 +18,8 @@ namespace GlobalChildrensApi.Data
         public DbSet<Estudiante> estudiante => Set<Estudiante>();
         public DbSet<Nota> nota => Set<Nota>();
         public DbSet<Tutor> tutor => Set<Tutor>();
+        public DbSet<CalendarioSemanalPrograma> calendariosemanalprograma => Set<CalendarioSemanalPrograma>();
+        public DbSet<PeriodoEvaluacion> periodoevaluacion => Set<PeriodoEvaluacion>();
 
 
 
