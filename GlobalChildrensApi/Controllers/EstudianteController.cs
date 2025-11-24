@@ -111,6 +111,18 @@ namespace GlobalChildrensApi.Controllers
                     return BadRequest("Ya existe un estudiante con este tipo y número de documento.");
                 }
 
+                // Validar que el aula exista y esté activa
+                var aula = await _db.aula.FindAsync(estudiante.aulaid);
+                if (aula == null)
+                {
+                    return BadRequest($"El aula con ID {estudiante.aulaid} no existe en el sistema.");
+                }
+
+                if (!aula.activo || aula.estado != "ACT")
+                {
+                    return BadRequest($"El aula (grado {aula.grado}º - {aula.nombre}) no está activa.");
+                }
+
                 // Establecer valores por defecto si no se proporcionan
                 if (string.IsNullOrWhiteSpace(estudiante.estado))
                     estudiante.estado = "ACT";
@@ -185,6 +197,50 @@ namespace GlobalChildrensApi.Controllers
                 if (existeDocumento)
                 {
                     return BadRequest("Ya existe otro estudiante con este tipo y número de documento.");
+                }
+
+                // VALIDACIÓN DE MOVIMIENTO POR NIVEL EDUCATIVO
+                // Si está cambiando de aula, validar que sea dentro del mismo nivel (primaria o secundaria)
+                if (existing.aulaid != estudiante.aulaid)
+                {
+                    // Obtener el grado del aula actual del estudiante
+                    var aulaActual = await _db.aula.FindAsync(existing.aulaid);
+                    if (aulaActual == null)
+                    {
+                        return BadRequest($"El aula actual (ID: {existing.aulaid}) no existe en el sistema.");
+                    }
+
+                    // Obtener el grado del aula nueva
+                    var aulaNueva = await _db.aula.FindAsync(estudiante.aulaid);
+                    if (aulaNueva == null)
+                    {
+                        return BadRequest($"El aula destino (ID: {estudiante.aulaid}) no existe en el sistema.");
+                    }
+
+                    // Determinar el nivel educativo del aula actual
+                    bool aulaActualEsPrimaria = aulaActual.grado == 4 || aulaActual.grado == 5;
+                    bool aulaActualEsSecundaria = aulaActual.grado == 9 || aulaActual.grado == 10;
+
+                    // Determinar el nivel educativo del aula nueva
+                    bool aulaNuevaEsPrimaria = aulaNueva.grado == 4 || aulaNueva.grado == 5;
+                    bool aulaNuevaEsSecundaria = aulaNueva.grado == 9 || aulaNueva.grado == 10;
+
+                    // Validar que ambas aulas estén en el mismo nivel
+                    if (aulaActualEsPrimaria && !aulaNuevaEsPrimaria)
+                    {
+                        return BadRequest($"No se puede mover al estudiante de primaria (grado {aulaActual.grado}º) a secundaria (grado {aulaNueva.grado}º). Solo se permite movimiento dentro del mismo nivel educativo.");
+                    }
+
+                    if (aulaActualEsSecundaria && !aulaNuevaEsSecundaria)
+                    {
+                        return BadRequest($"No se puede mover al estudiante de secundaria (grado {aulaActual.grado}º) a primaria (grado {aulaNueva.grado}º). Solo se permite movimiento dentro del mismo nivel educativo.");
+                    }
+
+                    // Validar que el aula nueva esté activa
+                    if (!aulaNueva.activo || aulaNueva.estado != "ACT")
+                    {
+                        return BadRequest($"El aula destino (grado {aulaNueva.grado}º - {aulaNueva.nombre}) no está activa.");
+                    }
                 }
 
                 // Actualizamos campos
