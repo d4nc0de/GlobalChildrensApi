@@ -1,0 +1,16 @@
+using System;
+
+namespace GlobalChildrensApi.Models
+{
+    public class ScoreEstudiantePrograma
+    {
+        public long ScoreEstudianteProgramaId { get; set; }
+        public string tipo_score { get; set; } = string.Empty;
+        public decimal valor { get; set; }
+        public DateTime fecha_registro { get; set; }
+        public string estado { get; set; } = "ACT";
+        public long EstudianteId { get; set; }
+        public long ProgramaId { get; set; }
+        public DateTime fecha_creacion { get; set; }
+    }
+}
