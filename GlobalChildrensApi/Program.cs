@@ -11,7 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var cs = builder.Configuration.GetConnectionString("Supabase");
-    options.UseNpgsql(cs);
+    options.UseNpgsql(cs, npgsql =>
+    {
+        npgsql.CommandTimeout(60);
+        npgsql.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null);
+    });
+
 });
 
 
