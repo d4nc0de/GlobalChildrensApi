@@ -4,11 +4,11 @@ namespace GlobalChildrensApi.Models
 {
     public class Horario
     {
-        public long HorarioId { get; set; }
+        public long horarioid { get; set; }
         public int minutos_por_unidad { get; set; }
         public string? descripcion { get; set; }
         public string estado { get; set; } = "ACT";
-        public long JornadaId { get; set; }
+        public long jornadaid { get; set; }
         public DateTime fecha_creacion { get; set; }
     }
 }

@@ -4,14 +4,14 @@ namespace GlobalChildrensApi.Models
 {
     public class Nota
     {
-        public long NotaId { get; set; }
+        public long notaid { get; set; }
         public decimal valor { get; set; }
         public DateTime fecha_registro { get; set; }
         public string estado { get; set; } = "ACT";
-        public long EstudianteId { get; set; }
-        public long ComponenteNotaId { get; set; }
-        public long PeriodoEvaluacionId { get; set; }
-        public long TutorId { get; set; }
+        public long estudianteid { get; set; }
+        public long componentenotaid { get; set; }
+        public long periodoevaluacionid { get; set; }
+        public long tutorid { get; set; }
         public DateTime fecha_creacion { get; set; }
     }
 }

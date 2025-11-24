@@ -4,7 +4,7 @@ namespace GlobalChildrensApi.Models
 {
     public class SesionClase
     {
-        public long SesionClaseId { get; set; }
+        public long sesionclaseid { get; set; }
         public DateTime fecha_real { get; set; }
         public short dia_semana { get; set; }
         public TimeSpan hora_inicio_programada { get; set; }
@@ -13,12 +13,12 @@ namespace GlobalChildrensApi.Models
         public bool clase_dictada { get; set; }
         public bool es_reposicion { get; set; }
         public string estado { get; set; } = "ACT";
-        public long TutorId { get; set; }
-        public long AulaId { get; set; }
-        public long CalendarioSemanalProgramaId { get; set; }
-        public long? MotivoNoClaseId { get; set; }
-        public long? FestivoId { get; set; }
-        public long? SesionRepuestaId { get; set; }
+        public long tutorid { get; set; }
+        public long aulaid { get; set; }
+        public long calendariosemenalprogramaid { get; set; }
+        public long? motivonoclaseid { get; set; }
+        public long? festivoid { get; set; }
+        public long? sesionrepuestaid { get; set; }
         public DateTime fecha_creacion { get; set; }
     }
 }
