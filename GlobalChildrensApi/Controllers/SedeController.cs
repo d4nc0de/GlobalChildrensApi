@@ -22,76 +22,132 @@ namespace GlobalChildrensApi.Controllers
         [HttpGet("ObtenerSedesActivas")]
         public async Task<ActionResult<IEnumerable<Sede>>> GetAll()
         {
-            var sedes = await _db.sede
+            try
+            {
+                var sedes = await _db.sede
                 .Where(s => s.estado == "ACT")
                 .OrderBy(s => s.sedeid)
                 .ToListAsync();
 
-            return Ok(sedes);
+                return Ok(sedes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+            
         }
 
-        [HttpGet("ObtenerSedePorId{id:long}")]
+        [HttpGet("ObtenerSedePorId/{id:long}")]
         public async Task<ActionResult<Sede>> GetById(long id)
         {
-            var sede = await _db.sede
+            try
+            {
+                var sede = await _db.sede
                 .FirstOrDefaultAsync(s => s.sedeid == id);
 
-            if (sede == null)
-                return NotFound($"No existe una sede con el id {id}.");
+                if (sede == null)
+                    return NotFound($"No existe una sede con el id {id}.");
 
-            if (sede.estado != "ACT")
-                return BadRequest($"La sede con id {id} existe pero no está activa (Estado = {sede.estado}).");
+                if (sede.estado != "ACT")
+                    return BadRequest($"La sede con id {id} existe pero no está activa (Estado = {sede.estado}).");
 
-            return Ok(sede);
+                return Ok(sede);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
         }
 
         [HttpPost("CrearSede")]
         public async Task<ActionResult<Sede>> Create([FromBody] Sede sede)
         {
-            if (string.IsNullOrWhiteSpace(sede.estado))
-                sede.estado = "ACT";
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sede.estado))
+                    sede.estado = "ACT";
 
 
-            _db.sede.Add(sede);
-            await _db.SaveChangesAsync();
+                _db.sede.Add(sede);
+                await _db.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = sede.sedeid }, sede);
+                return CreatedAtAction(nameof(GetById), new { id = sede.sedeid }, sede);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
         }
 
-        [HttpPut("ActualizarSede{id:long}")]
+        [HttpPut("ActualizarSede/{id:long}")]
         public async Task<IActionResult> Update(long id, [FromBody] Sede sede)
         {
-            if (id != sede.sedeid)
-                return BadRequest("El id de la URL no coincide con el id del cuerpo.");
+            try
+            {
+                if (id != sede.sedeid)
+                    return BadRequest("El id de la URL no coincide con el id del cuerpo.");
 
-            var existing = await _db.sede.FindAsync(id);
-            if (existing == null)
-                return NotFound($"No existe una sede con el id {id}.");
+                var existing = await _db.sede.FindAsync(id);
+                if (existing == null)
+                    return NotFound($"No existe una sede con el id {id}.");
 
-            // Actualizamos campos simples
-            existing.nombre = sede.nombre;
-            existing.direccion = sede.direccion;
-            existing.es_principal = sede.es_principal;
-            existing.estado = sede.estado;
-            existing.institucionid = sede.institucionid;
+                // Actualizamos campos simples
+                existing.nombre = sede.nombre;
+                existing.direccion = sede.direccion;
+                existing.es_principal = sede.es_principal;
+                existing.estado = sede.estado;
+                existing.institucionid = sede.institucionid;
 
-            await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
-            return NoContent();
+                return Ok("Sede actualizada correctamente");
+            }
+            catch (Exception ex) 
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
         }
 
         //Cambia el estado de la entidad a INA
-        [HttpDelete("InactivarSede{id:long}")]
+        [HttpDelete("InactivarSede/{id:long}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var sede = await _db.sede.FindAsync(id);
-            if (sede == null)
-                return NotFound($"No existe una sede con el id {id}.");
+            try
+            {
+                var sede = await _db.sede.FindAsync(id);
+                if (sede == null)
+                    return NotFound($"No existe una sede con el id {id}.");
 
-            sede.estado = "INA"; 
-            await _db.SaveChangesAsync();
+                sede.estado = "INA";
+                await _db.SaveChangesAsync();
 
-            return NoContent();
+                return Ok("Sede Inacvitada correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
         }
     }
 }
