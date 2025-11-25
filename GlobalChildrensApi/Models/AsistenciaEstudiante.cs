@@ -12,6 +12,6 @@ namespace GlobalChildrensApi.Models
         public long sesionclaseid { get; set; }
         public long estudianteid { get; set; }
         public long? motivoinasistenciaestudianteid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

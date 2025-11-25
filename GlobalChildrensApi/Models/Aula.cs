@@ -14,7 +14,7 @@ namespace GlobalChildrensApi.Models
         public long programaid { get; set; }
         public long jornadaid { get; set; }
         public long tutorid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }
 

@@ -12,6 +12,6 @@ namespace GlobalChildrensApi.Models
         public long componentenotaid { get; set; }
         public long periodoevaluacionid { get; set; }
         public long tutorid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

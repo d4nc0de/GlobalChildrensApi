@@ -14,6 +14,6 @@ namespace GlobalChildrensApi.Models
         public string estado { get; set; } = "ACT";
         public long tipodocumentoid { get; set; }
         public long aulaid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

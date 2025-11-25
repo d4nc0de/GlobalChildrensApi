@@ -127,14 +127,10 @@ namespace GlobalChildrensApi.Controllers
                     asistencia.motivoinasistenciaestudianteid = null;
                     asistencia.justificada = false;
                 }
-                
-                // Establecer valores por defecto
-                if (string.IsNullOrWhiteSpace(asistencia.estado))
-                    asistencia.estado = "ACT";
 
-                if (string.IsNullOrWhiteSpace(asistencia.fecha_creacion.ToString()))
-                    asistencia.fecha_creacion = DateTime.UtcNow;
-                    asistencia.fecha_creacion = DateTime.SpecifyKind(asistencia.fecha_creacion, DateTimeKind.Utc);
+                // Establecer valores por defecto
+                //if (string.IsNullOrWhiteSpace(asistencia.estado))
+                //    asistencia.estado = "ACT";
 
                 _db.asistenciaestudiante.Add(asistencia);
                 await _db.SaveChangesAsync();

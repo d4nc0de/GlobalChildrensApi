@@ -9,6 +9,6 @@ namespace GlobalChildrensApi.Models
         public decimal porcentaje { get; set; }
         public bool activo { get; set; }
         public string estado { get; set; } = "ACT";
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

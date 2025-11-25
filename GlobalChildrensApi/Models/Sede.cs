@@ -10,6 +10,6 @@ namespace GlobalChildrensApi.Models
         public bool es_principal { get; set; }
         public string estado { get; set; } = "ACT";
         public long institucionid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

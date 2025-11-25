@@ -9,6 +9,6 @@ namespace GlobalChildrensApi.Models
         public string descripcion { get; set; } = string.Empty;
         public bool permite_reposicion { get; set; }
         public string estado { get; set; } = "ACT";
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }
