@@ -12,8 +12,9 @@ namespace GlobalChildrensApi.Models
         public string? telefono { get; set; }
         public bool activo { get; set; }
         public string estado { get; set; } = "ACT";
-        public long tipodocumentoid { get; set; }
-        public int rolid { get; set; }
+        public long TipoDocumentoId { get; set; }
+        public int RolId { get; set; }
+        public int? usuarioId { get; set; }
         public DateTime fecha_creacion { get; set; }
     }
 }
