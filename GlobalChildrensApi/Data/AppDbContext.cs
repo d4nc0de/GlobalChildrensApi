@@ -22,7 +22,6 @@ namespace GlobalChildrensApi.Data
         public DbSet<CalendarioSemanalPrograma> calendariosemanalprograma => Set<CalendarioSemanalPrograma>();
         public DbSet<PeriodoEvaluacion> periodoevaluacion => Set<PeriodoEvaluacion>();
         public DbSet<AulaTutorHistorico> aulatutorhistorico => Set<AulaTutorHistorico>();
-        public DbSet<Estudiante> estudiante => Set<Estudiante>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
