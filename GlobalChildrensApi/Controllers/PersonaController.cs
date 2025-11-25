@@ -141,6 +141,8 @@ namespace GlobalChildrensApi.Controllers
                     return NotFound($"No existe una persona con el id {id}.");
 
                 persona.estado = "INA";
+                persona.activo = false;
+
                 await _db.SaveChangesAsync();
 
                 return Ok("Persona Inactivada correctamente");
