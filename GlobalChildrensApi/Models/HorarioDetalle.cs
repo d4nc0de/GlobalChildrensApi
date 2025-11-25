@@ -11,6 +11,6 @@ namespace GlobalChildrensApi.Models
         public int unidades { get; set; }
         public string estado { get; set; } = "ACT";
         public long horarioid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

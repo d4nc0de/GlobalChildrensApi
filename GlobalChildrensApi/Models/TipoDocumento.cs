@@ -8,6 +8,6 @@ namespace GlobalChildrensApi.Models
         public string codigo { get; set; } = string.Empty;
         public string nombre { get; set; } = string.Empty;
         public string estado { get; set; } = "ACT";
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

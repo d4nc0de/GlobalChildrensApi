@@ -11,6 +11,6 @@ namespace GlobalChildrensApi.Models
         public string estado { get; set; } = "ACT";
         public long estudianteid { get; set; }
         public long programaid { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

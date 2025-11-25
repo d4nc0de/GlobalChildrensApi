@@ -15,6 +15,6 @@ namespace GlobalChildrensApi.Models
         public long TipoDocumentoId { get; set; }
         public int RolId { get; set; }
         public int? usuarioId { get; set; }
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }

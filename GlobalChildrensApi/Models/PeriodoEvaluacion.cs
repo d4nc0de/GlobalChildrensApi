@@ -10,6 +10,6 @@ namespace GlobalChildrensApi.Models
         public DateTime fecha_fin { get; set; }
         public int orden { get; set; }
         public string estado { get; set; } = "ACT";
-        public DateTime fecha_creacion { get; set; }
+        public DateTime fecha_creacion { get; set; } = DateTime.UtcNow;
     }
 }
