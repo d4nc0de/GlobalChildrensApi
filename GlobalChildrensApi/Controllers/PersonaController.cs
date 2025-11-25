@@ -112,8 +112,8 @@ namespace GlobalChildrensApi.Controllers
                 existing.correo = persona.correo;
                 existing.activo = persona.activo;
                 existing.estado = persona.estado;
-                existing.TipoDocumentoId = persona.TipoDocumentoId;
-                existing.RolId = persona.RolId;
+                existing.tipodocumentoid = persona.tipodocumentoid;
+                existing.rolid = persona.rolid;
                 existing.usuarioId = persona.usuarioId;
 
                 await _db.SaveChangesAsync();
@@ -136,11 +136,11 @@ namespace GlobalChildrensApi.Controllers
         {
             try
             {
-                var sede = await _db.sede.FindAsync(id);
-                if (sede == null)
+                var persona = await _db.persona.FindAsync(id);
+                if (persona == null)
                     return NotFound($"No existe una persona con el id {id}.");
 
-                sede.estado = "INA";
+                persona.estado = "INA";
                 await _db.SaveChangesAsync();
 
                 return Ok("Persona Inactivada correctamente");
