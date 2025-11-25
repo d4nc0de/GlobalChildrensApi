@@ -18,8 +18,9 @@ namespace GlobalChildrensApi.Controllers
         {
             _db = db;
         }
-
+        //======================================================================================
         //CRUD de AsistenciaEstudiante
+        //======================================================================================
         [HttpGet("ObtenerAsistencia/{id:long}")]
         public async Task<ActionResult<AsistenciaEstudiante>> GetAsistenciaById(long id)
         {
@@ -240,7 +241,9 @@ namespace GlobalChildrensApi.Controllers
             }
         }
 
+        //======================================================================================
         //CRUD de notas de estudiante
+        //======================================================================================
         [HttpGet("ObtenerNotasAula/{idaula:long}")]
         public async Task<ActionResult<IEnumerable<Nota>>> GetNotaByAula(long idaula)
         {
@@ -299,6 +302,76 @@ namespace GlobalChildrensApi.Controllers
             }
         }
 
+        [HttpGet("ObtenerNotaByComponente/{idcomponente:long}")]
+        public async Task<ActionResult<IEnumerable<Nota>>> GetNotaByComponente(long idcomponente)
+        {
+            try
+            {
+                // Validar si el componente de nota existe
+                var componente = await _db.componentenota.FindAsync(idcomponente);
+                if (componente == null || componente.estado != "ACT" || !componente.activo)
+                {
+                    return NotFound($"No existe un componente de nota activo con el id {idcomponente}.");
+                }
+
+                // Obtener las notas asociadas al componente de nota
+                var notas = await _db.nota
+                    .Where(n => n.componentenotaid == idcomponente && n.estado == "ACT")
+                    .OrderBy(n => n.notaid)
+                    .ToListAsync();
+
+                if (!notas.Any())
+                {
+                    return NotFound($"No existen notas activas con el componente de nota id {idcomponente}.");
+                }
+
+                return Ok(notas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("ObtenerNotaByPeriodo/{idperiodo:long}")]
+        public async Task<ActionResult<IEnumerable<Nota>>> GetNotaByPeriodo(long idperiodo)
+        {
+            try
+            {
+                // Validar si el componente de nota existe
+                var periodo = await _db.periodoevaluacion.FindAsync(idperiodo);
+                if (periodo == null || periodo.estado != "ACT")
+                {
+                    return NotFound($"No existe un periodo activo con el id {idperiodo}.");
+                }
+
+                // Obtener las notas asociadas al periodo
+                var notas = await _db.nota
+                    .Where(n => n.periodoevaluacionid == idperiodo && n.estado == "ACT")
+                    .OrderBy(n => n.notaid)
+                    .ToListAsync();
+
+                if (!notas.Any())
+                {
+                    return NotFound($"No existen notas activas con para el periodo id {idperiodo}.");
+                }
+
+                return Ok(notas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
         [HttpGet("ObtenerNotasEstudiante/{idestudiante:long}")]
         public async Task<ActionResult<Nota>> GetNotaByEstudiante(long idestudiante)
         {
@@ -327,6 +400,41 @@ namespace GlobalChildrensApi.Controllers
             }
         }
 
+        [HttpGet("ObtenerPonderacionNotasEstudiante/{idestudiante:long}")]
+        public async Task<ActionResult<Nota>> GetPonderacionNotasByEstudiante(long idestudiante)
+        {
+            try
+            {
+                var estudiante = await _db.estudiante.FindAsync(idestudiante);
+                if (estudiante == null || estudiante.estado != "ACT" || !estudiante.activo)
+                {
+                    return NotFound($"No existe un estudiante activo con el id {idestudiante}.");
+                }
+
+                var notas = await _db.nota
+                .Where(n => n.estado == "ACT" && n.estudianteid == idestudiante)
+                .OrderBy(n => n.notaid)
+                .ToListAsync();
+
+                // Calcular la ponderación total como la multipliación del valor de la nota por el porcentaje del componente de nota
+                var ponderacionNotas = notas.Select(n => new
+                {
+                    Nota = n,
+                    ComponenteNota = _db.componentenota.Find(n.componentenotaid),
+                    Ponderacion = n.valor * (_db.componentenota.Find(n.componentenotaid)?.porcentaje ?? 0) / 100
+                }).ToList();
+
+                return Ok(ponderacionNotas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
 
         [HttpPost("CrearNotaEstudiante")]
         public async Task<ActionResult<Nota>> CreateNota([FromBody] Nota nota)
@@ -458,10 +566,332 @@ namespace GlobalChildrensApi.Controllers
                     error = ex.Message
                 });
             }
+
+
         }
 
+        //======================================================================================
+        //CRUD de componente notas de estudiante
+        //======================================================================================
+        [HttpGet("ObtenerComponenteNota/{id:long}")]
+        public async Task<ActionResult<IEnumerable<ComponenteNota>>> GetComponenteNotaById(long id)
+        {
+            try
+            {
+                // Obtener el componente nota por su ID
+                var componente = await _db.componentenota.FindAsync(id);
+
+                if (componente == null || componente.estado != "ACT" || !componente.activo)
+                {
+                    return NotFound($"No existe un componente de nota activo con el id {id}.");
+                }
+
+                return Ok(componente);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("CrearComponenteNota")]
+        public async Task<ActionResult<ComponenteNota>> CreateComponenteNota([FromBody] ComponenteNota componente)
+        {
+            try
+            {
+                //Validaciones
+                if (string.IsNullOrWhiteSpace(componente.nombre))
+                {
+                    return BadRequest("El nombre del componente de nota no puede estar vacío.");
+                }
+                if (componente.porcentaje < 0 || componente.porcentaje > 100)
+                {
+                    return BadRequest("El porcentaje del componente de nota debe estar entre 0 y 100.");
+                }
+                if (string.IsNullOrWhiteSpace(componente.estado))
+                    componente.estado = "ACT";
+                if (string.IsNullOrWhiteSpace(componente.fecha_creacion.ToString()))
+                    componente.fecha_creacion = DateTime.UtcNow;
+                componente.fecha_creacion = DateTime.SpecifyKind(componente.fecha_creacion, DateTimeKind.Utc);
+
+                _db.componentenota.Add(componente);
+                await _db.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetComponenteNotaById), new { id = componente.componentenotaid }, componente);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("ActualizarComponenteNota/{id:long}")]
+        public async Task<IActionResult> UpdateComponenteNota(long id, [FromBody] ComponenteNota componente)
+        {
+            try
+            {
+                // Validar que el id en la URL coincida con el id en el cuerpo
+                if (id != componente.componentenotaid)
+                    return BadRequest("El id de la URL no coincide con el id del cuerpo.");
+
+                // Validaciones
+
+                var existing = await _db.componentenota.FindAsync(id);
+                if (existing == null)
+                    return NotFound($"No existe un componente de nota con el id {id}.");
+
+                // Actualizamos campos
+                existing.nombre = componente.nombre;
+                existing.porcentaje = componente.porcentaje;
+                existing.activo = componente.activo;
+                existing.estado = componente.estado;
+
+                await _db.SaveChangesAsync();
+
+                return Ok("Componeten de nota actualizado correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        //Cambia el estado de la entidad a INA y activo a false
+        [HttpDelete("InactivarCompoenteNota/{id:long}")]
+        public async Task<IActionResult> InactivateComponenteNota(long id)
+        {
+            try
+            {
+                var componente = await _db.componentenota.FindAsync(id);
+                if (componente == null || componente.estado == "INA")
+                    return NotFound($"No existe un componente de nota activo con el id {id}.");
+
+                componente.estado = "INA";
+                await _db.SaveChangesAsync();
+
+                return Ok("Componente de nota inactivado correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+        
+        [HttpDelete("BorrarComponenteNota/{id:long}")]
+        public async Task<IActionResult> DeleteComponenteNota(long id)
+        {
+            try
+            {
+                var componente = await _db.componentenota.FindAsync(id);
+                if (componente == null)
+                    return NotFound($"No existe un componente de nota con el id {id}.");
+
+                _db.componentenota.Remove(componente);
+                await _db.SaveChangesAsync();
+
+                return Ok("Componente de nota eliminada correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
 
 
+        }
+
+        //======================================================================================
+        //CRUD de periodos de evaluacion
+        //======================================================================================
+        [HttpGet("ObtenerPeriodoEvaluacion/{id:long}")]
+        public async Task<ActionResult<IEnumerable<ComponenteNota>>> GetPeriodoEvaluacionById(long id)
+        {
+            try
+            {
+                // Obtener el periodo de evaluacion por su ID
+                var periodo = await _db.periodoevaluacion.FindAsync(id);
+
+                if (periodo == null || periodo.estado != "ACT")
+                {
+                    return NotFound($"No existe un periodo de evaluacion activo con el id {id}.");
+                }
+
+                return Ok(periodo);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("CrearPeriodoEvaluacion")]
+        public async Task<ActionResult<PeriodoEvaluacion>> CreatePeriodoEvaluacion([FromBody] PeriodoEvaluacion periodo)
+        {
+            try
+            {
+                //Validaciones
+                if (string.IsNullOrWhiteSpace(periodo.nombre))
+                {
+                    return BadRequest("El nombre del periodo de evaluacion no puede estar vacío.");
+                }
+                if (string.IsNullOrWhiteSpace(periodo.fecha_inicio.ToString()))
+                {
+                    return BadRequest("La fecha de inicio del periodo de evaluacion no puede estar vacía.");
+                }
+                periodo.fecha_inicio = DateTime.SpecifyKind(periodo.fecha_inicio, DateTimeKind.Utc);
+                if (string.IsNullOrWhiteSpace(periodo.fecha_fin.ToString()))
+                {
+                    return BadRequest("La fecha de fin del periodo de evaluacion no puede estar vacía.");
+                }
+                periodo.fecha_fin = DateTime.SpecifyKind(periodo.fecha_fin, DateTimeKind.Utc);
+                if (periodo.fecha_fin < periodo.fecha_inicio)
+                {
+                    return BadRequest("La fecha de fin del periodo de evaluacion no puede ser anterior a la fecha de inicio.");
+                }
+                if (string.IsNullOrWhiteSpace(periodo.estado))
+                    periodo.estado = "ACT";
+                if (string.IsNullOrWhiteSpace(periodo.fecha_creacion.ToString()))
+                    periodo.fecha_creacion = DateTime.UtcNow;
+                periodo.fecha_creacion = DateTime.SpecifyKind(periodo.fecha_creacion, DateTimeKind.Utc);
+
+
+                _db.periodoevaluacion.Add(periodo);
+                await _db.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetPeriodoEvaluacionById), new { id = periodo.periodoevaluacionid }, periodo);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("ActualizarPeriodoEvaluacion/{id:long}")]
+        public async Task<IActionResult> UpdatePeriodoEvaluacion(long id, [FromBody] PeriodoEvaluacion periodo)
+        {
+            try
+            {
+                // Validar que el id en la URL coincida con el id en el cuerpo
+                if (id != periodo.periodoevaluacionid)
+                    return BadRequest("El id de la URL no coincide con el id del cuerpo.");
+
+                // Validaciones
+                var existing = await _db.periodoevaluacion.FindAsync(id);
+                if (existing == null)
+                    return NotFound($"No existe un periodo de evaluacion con el id {id}.");
+                if (string.IsNullOrWhiteSpace(periodo.fecha_inicio.ToString()))
+                {
+                    return BadRequest("La fecha de inicio del periodo de evaluacion no puede estar vacía.");
+                }
+                periodo.fecha_inicio = DateTime.SpecifyKind(periodo.fecha_inicio, DateTimeKind.Utc);
+                if (string.IsNullOrWhiteSpace(periodo.fecha_fin.ToString()))
+                {
+                    return BadRequest("La fecha de fin del periodo de evaluacion no puede estar vacía.");
+                }
+                periodo.fecha_fin = DateTime.SpecifyKind(periodo.fecha_fin, DateTimeKind.Utc);
+                if (periodo.fecha_fin < periodo.fecha_inicio)
+                {
+                    return BadRequest("La fecha de fin del periodo de evaluacion no puede ser anterior a la fecha de inicio.");
+                }
+
+                // Actualizamos campos
+                existing.nombre = periodo.nombre;
+                existing.fecha_inicio = periodo.fecha_inicio;
+                existing.fecha_fin = periodo.fecha_fin;
+                existing.orden = periodo.orden;
+                existing.estado = periodo.estado;
+
+                await _db.SaveChangesAsync();
+
+                return Ok("Periodo de evaluacion actualizado correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
+        //Cambia el estado de la entidad a INA y activo a false
+        [HttpDelete("InactivarPeriodoEvaluacion/{id:long}")]
+        public async Task<IActionResult> InactivatePeriodoEvaluacion(long id)
+        {
+            try
+            {
+                var periodo = await _db.periodoevaluacion.FindAsync(id);
+                if (periodo == null || periodo.estado == "INA")
+                    return NotFound($"No existe un periodo de evaluacion activo con el id {id}.");
+
+                periodo.estado = "INA";
+                await _db.SaveChangesAsync();
+
+                return Ok("Periodo de evaluacion inactivado correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+        
+        [HttpDelete("BorrarPeriodoEvaluacion/{id:long}")]
+        public async Task<IActionResult> DeletePeriodoEvaluacion(long id)
+        {
+            try
+            {
+                var periodo = await _db.periodoevaluacion.FindAsync(id);
+                if (periodo == null)
+                    return NotFound($"No existe un periodo de evaluacion con el id {id}.");
+
+                _db.periodoevaluacion.Remove(periodo);
+                await _db.SaveChangesAsync();
+
+                return Ok("periodo de evaluacion eliminado correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+
+
+        }
     }
 }
 
