@@ -12,6 +12,7 @@ namespace GlobalChildrensApi.Data
         }
 
         public DbSet<Sede> sede => Set<Sede>();
+        public DbSet<Institucion> institucion => Set<Institucion>();
         public DbSet<Aula> aula => Set<Aula>();
         public DbSet<AsistenciaEstudiante> asistenciaestudiante => Set<AsistenciaEstudiante>();
         public DbSet<SesionClase> sesionclase => Set<SesionClase>();
