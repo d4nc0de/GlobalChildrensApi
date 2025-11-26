@@ -69,6 +69,32 @@ namespace GlobalChildrensApi.Controllers
             }
         }
 
+        [HttpGet("ObtenerPersonaPorUsuarioId/{Usuarioid:Guid}")]
+        public async Task<ActionResult<Persona>> GetByUserId(Guid Usuarioid)
+        {
+            try
+            {
+                var persona = await _db.persona
+                .FirstOrDefaultAsync(s => s.usuarioId == Usuarioid);
+
+                if (persona == null)
+                    return NotFound($"No existe una persona con el id {Usuarioid}.");
+
+                if (persona.estado != "ACT")
+                    return BadRequest($"La persona con id: {Usuarioid} existe pero no está activa (Estado = {persona.estado}).");
+
+                return Ok(persona);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    error = ex.Message
+                });
+            }
+        }
+
         [HttpPost("CrearPersona")]
         public async Task<ActionResult<Sede>> Create([FromBody] Persona persona)
         {

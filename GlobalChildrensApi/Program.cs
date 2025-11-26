@@ -6,6 +6,24 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+                .WithOrigins(
+                    "http://localhost:4200",
+                    "https://localhost:4200"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -63,6 +81,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors(myAllowSpecificOrigins);
 
 //app.UseHttpsRedirection();
 
