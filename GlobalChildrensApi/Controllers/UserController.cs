@@ -20,7 +20,7 @@ namespace GlobalChildrensApi.Controllers
         }
 
 
-        [HttpGet("ObtenerPersonasActivas")]
+        [HttpGet("ObtenerUsuariosActivas")]
         public async Task<ActionResult<IEnumerable<AuthUser>>> GetAll()
         {
             try
