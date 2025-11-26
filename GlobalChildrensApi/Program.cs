@@ -16,7 +16,8 @@ builder.Services.AddCors(options =>
             policy
                 .WithOrigins(
                     "http://localhost:4200",
-                    "https://localhost:4200"
+                    "https://localhost:4200",
+                    "https://english-vercel-yf92.vercel.app"
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
