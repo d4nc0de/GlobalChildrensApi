@@ -24,6 +24,14 @@ namespace GlobalChildrensApi.Data
         public DbSet<AulaTutorHistorico> aulatutorhistorico => Set<AulaTutorHistorico>();
         public DbSet<Persona> persona => Set<Persona>();
         public DbSet<AuthUser> AuthUsers => Set<AuthUser>();
+        public DbSet<Festivo> festivo => Set<Festivo>();
+        public DbSet<AulaHorarioHistorico> aulahorariohistorico => Set<AulaHorarioHistorico>();
+        public DbSet<Programa> programa => Set<Programa>();
+        public DbSet<Jornada> jornada => Set<Jornada>();
+        public DbSet<TipoDocumento> tipodocumento => Set<TipoDocumento>();
+        public DbSet<MotivoInasistenciaEstudiante> motivoinasistenciaestudiante => Set<MotivoInasistenciaEstudiante>();
+        public DbSet<Horario> horario => Set<Horario>();
+        public DbSet<Institucion> institucion => Set<Institucion>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
