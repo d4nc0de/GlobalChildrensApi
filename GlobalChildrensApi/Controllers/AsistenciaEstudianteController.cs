@@ -29,11 +29,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderByDescending(a => a.fecha_creacion)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = asistencias.Count,
-                    asistencias = asistencias
-                });
+                return Ok(asistencias);
             }
             catch (Exception ex)
             {
@@ -103,12 +99,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderByDescending(a => a.fecha_creacion)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    estudiante_id = estudianteid,
-                    total_registros = asistencias.Count,
-                    asistencias = asistencias
-                });
+                return Ok(asistencias);
             }
             catch (Exception ex)
             {
@@ -132,12 +123,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(a => a.estudianteid)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    sesion_clase_id = sesionclaseid,
-                    total_registros = asistencias.Count,
-                    asistencias = asistencias
-                });
+                return Ok(asistencias);
             }
             catch (Exception ex)
             {

@@ -29,11 +29,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(j => j.codigo)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = jornadas.Count,
-                    jornadas = jornadas
-                });
+                return Ok(jornadas);
             }
             catch (Exception ex)
             {

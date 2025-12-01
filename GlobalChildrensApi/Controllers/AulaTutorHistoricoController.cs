@@ -29,11 +29,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderByDescending(h => h.fecha_inicio)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = historiales.Count,
-                    historiales = historiales
-                });
+                return Ok(historiales);
             }
             catch (Exception ex)
             {
@@ -96,15 +92,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderByDescending(h => h.fecha_inicio)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    aula_id = aulaid,
-                    aula_nombre = aula.nombre,
-                    aula_grado = aula.grado,
-                    tutor_actual_id = aula.tutorid,
-                    total_registros = historiales.Count,
-                    historiales = historiales
-                });
+                return Ok(historiales);
             }
             catch (Exception ex)
             {
@@ -161,12 +149,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderByDescending(h => h.fecha_inicio)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    tutor_id = tutorid,
-                    total_aulas_asignadas = historiales.Count,
-                    historiales = historiales
-                });
+                return Ok(historiales);
             }
             catch (Exception ex)
             {

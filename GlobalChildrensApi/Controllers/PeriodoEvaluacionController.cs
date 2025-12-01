@@ -30,11 +30,7 @@ namespace GlobalChildrensApi.Controllers
                     .ThenBy(p => p.fecha_inicio)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = periodos.Count,
-                    periodos = periodos
-                });
+                return Ok(periodos);
             }
             catch (Exception ex)
             {

@@ -30,7 +30,9 @@ namespace GlobalChildrensApi.Data
         public DbSet<Jornada> jornada => Set<Jornada>();
         public DbSet<TipoDocumento> tipodocumento => Set<TipoDocumento>();
         public DbSet<MotivoInasistenciaEstudiante> motivoinasistenciaestudiante => Set<MotivoInasistenciaEstudiante>();
+        public DbSet<MotivoNoClase> motivonoclase => Set<MotivoNoClase>();
         public DbSet<Horario> horario => Set<Horario>();
+        public DbSet<HorarioDetalle> horariodetalle => Set<HorarioDetalle>();
         public DbSet<Institucion> institucion => Set<Institucion>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

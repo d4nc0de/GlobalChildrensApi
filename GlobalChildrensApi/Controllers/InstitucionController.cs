@@ -29,11 +29,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(i => i.nombre)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = instituciones.Count,
-                    instituciones = instituciones
-                });
+                return Ok(instituciones);
             }
             catch (Exception ex)
             {

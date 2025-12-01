@@ -29,11 +29,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(f => f.fecha)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = festivos.Count,
-                    festivos = festivos
-                });
+                return Ok(festivos);
             }
             catch (Exception ex)
             {
@@ -92,12 +88,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(f => f.fecha)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    anio = anio,
-                    total = festivos.Count,
-                    festivos = festivos
-                });
+                return Ok(festivos);
             }
             catch (Exception ex)
             {
@@ -132,13 +123,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(f => f.fecha)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    fecha_inicio = fechaInicio.Date,
-                    fecha_fin = fechaFin.Date,
-                    total = festivos.Count,
-                    festivos = festivos
-                });
+                return Ok(festivos);
             }
             catch (Exception ex)
             {

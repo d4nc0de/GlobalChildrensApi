@@ -33,11 +33,7 @@ namespace GlobalChildrensApi.Controllers
                     .ThenBy(s => s.hora_inicio_programada)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = sesiones.Count,
-                    sesiones = sesiones
-                });
+                return Ok(sesiones);
             }
             catch (Exception ex)
             {

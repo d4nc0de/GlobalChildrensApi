@@ -30,11 +30,7 @@ namespace GlobalChildrensApi.Controllers
                     .ThenBy(c => c.numero_semana)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = semanas.Count,
-                    semanas = semanas
-                });
+                return Ok(semanas);
             }
             catch (Exception ex)
             {
@@ -88,12 +84,7 @@ namespace GlobalChildrensApi.Controllers
                     .ThenBy(c => c.numero_semana)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    programa_id = programaid,
-                    total_semanas = semanas.Count,
-                    semanas = semanas
-                });
+                return Ok(semanas);
             }
             catch (Exception ex)
             {
@@ -182,13 +173,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(c => c.numero_semana)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    anio = anio,
-                    programa_id = programaid,
-                    total_semanas = semanas.Count,
-                    semanas = semanas
-                });
+                return Ok(semanas);
             }
             catch (Exception ex)
             {

@@ -29,11 +29,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(c => c.nombre)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    total = componentes.Count,
-                    componentes = componentes
-                });
+                return Ok(componentes);
             }
             catch (Exception ex)
             {
@@ -106,13 +102,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderBy(c => c.porcentaje)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    porcentaje_min = porcentajeMin,
-                    porcentaje_max = porcentajeMax,
-                    total = componentes.Count,
-                    componentes = componentes
-                });
+                return Ok(componentes);
             }
             catch (Exception ex)
             {
