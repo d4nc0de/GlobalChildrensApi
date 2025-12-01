@@ -20,6 +20,32 @@ namespace GlobalChildrensApi.Controllers
         }
 
         // CRUD de sesiones de clase
+
+        // Obtener todas las sesiones de clase activas
+        [HttpGet("GetAllSesionClase")]
+        public async Task<ActionResult<IEnumerable<SesionClase>>> GetAllSesionClase()
+        {
+            try
+            {
+                var sesiones = await _db.sesionclase
+                    .Where(s => s.estado == "ACT")
+                    .OrderByDescending(s => s.fecha_real)
+                    .ThenBy(s => s.hora_inicio_programada)
+                    .ToListAsync();
+
+                return Ok(sesiones);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    error = "ERROR_SERVIDOR",
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    details = ex.Message
+                });
+            }
+        }
+
         [HttpGet("ObtenerSesionClase/{id:long}")]
         public async Task<ActionResult<SesionClase>> GetSesionClaseById(long id)
         {

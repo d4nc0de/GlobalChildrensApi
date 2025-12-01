@@ -459,15 +459,7 @@ namespace GlobalChildrensApi.Controllers
                     .OrderByDescending(h => h.fecha_inicio)
                     .ToListAsync();
 
-                return Ok(new
-                {
-                    aula_id = aulaid,
-                    aula_nombre = aula.nombre,
-                    aula_grado = aula.grado,
-                    tutor_actual_id = aula.tutorid,
-                    total_registros = historial.Count,
-                    historial = historial
-                });
+                return Ok(historial);
             }
             catch (Exception ex)
             {
