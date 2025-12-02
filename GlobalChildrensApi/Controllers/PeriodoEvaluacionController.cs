@@ -401,16 +401,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok(new
-                {
-                    message = "Período de evaluación actualizado correctamente",
-                    periodo_id = existing.periodoevaluacionid,
-                    nombre = existing.nombre,
-                    fecha_inicio = existing.fecha_inicio.Date.ToString("yyyy-MM-dd"),
-                    fecha_fin = existing.fecha_fin.Date.ToString("yyyy-MM-dd"),
-                    orden = existing.orden,
-                    estado = existing.estado
-                });
+                return Ok(existing);
             }
             catch (DbUpdateException dbEx)
             {
