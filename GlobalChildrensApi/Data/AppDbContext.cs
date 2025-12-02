@@ -34,7 +34,6 @@ namespace GlobalChildrensApi.Data
         public DbSet<MotivoNoClase> motivonoclase => Set<MotivoNoClase>();
         public DbSet<Horario> horario => Set<Horario>();
         public DbSet<HorarioDetalle> horariodetalle => Set<HorarioDetalle>();
-        public DbSet<Institucion> institucion => Set<Institucion>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
