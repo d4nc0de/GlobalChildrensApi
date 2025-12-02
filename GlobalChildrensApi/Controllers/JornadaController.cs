@@ -122,7 +122,7 @@ namespace GlobalChildrensApi.Controllers
                         message = $"La descripción no puede exceder 100 caracteres. Longitud actual: {jornada.descripcion.Length}."
                     });
                 }
-
+                /*
                 // VALIDACIÓN 5: Verificar que no exista ya una jornada con ese código
                 var jornadaExistente = await _db.jornada
                     .FirstOrDefaultAsync(j => j.codigo.ToUpper() == jornada.codigo.ToUpper());
@@ -138,7 +138,7 @@ namespace GlobalChildrensApi.Controllers
                         jornada_existente_descripcion = jornadaExistente.descripcion,
                         jornada_existente_estado = jornadaExistente.estado
                     });
-                }
+                }*/
 
                 // Establecer valores por defecto
                 if (string.IsNullOrWhiteSpace(jornada.estado))
