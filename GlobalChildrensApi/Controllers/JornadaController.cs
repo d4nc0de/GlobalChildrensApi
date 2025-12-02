@@ -244,6 +244,7 @@ namespace GlobalChildrensApi.Controllers
                     });
                 }
 
+                /*
                 // VALIDACIÓN 5: Verificar que no exista otra jornada con ese código (excepto la actual)
                 var jornadaExistente = await _db.jornada
                     .FirstOrDefaultAsync(j => j.codigo.ToUpper() == jornada.codigo.ToUpper() && j.jornadaid != id);
@@ -259,7 +260,7 @@ namespace GlobalChildrensApi.Controllers
                         jornada_existente_descripcion = jornadaExistente.descripcion,
                         jornada_existente_estado = jornadaExistente.estado
                     });
-                }
+                }*/
 
                 // Actualizamos campos
                 existing.codigo = jornada.codigo;
