@@ -214,7 +214,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Sesion de clase actualizada correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {
@@ -239,7 +239,7 @@ namespace GlobalChildrensApi.Controllers
                 sesion.estado = "INA";
                 await _db.SaveChangesAsync();
 
-                return Ok("Sesion de clase inactivada correctamente");
+                return Ok(sesion);
             }
             catch (Exception ex)
             {
@@ -262,7 +262,7 @@ namespace GlobalChildrensApi.Controllers
 
                 _db.sesionclase.Remove(sesion);
                 await _db.SaveChangesAsync();
-                return Ok("Sesion de clase eliminada correctamente");
+                return Ok(sesion);
             }
             catch (Exception ex)
             {
