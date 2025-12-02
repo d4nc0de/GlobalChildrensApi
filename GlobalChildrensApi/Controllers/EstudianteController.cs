@@ -256,7 +256,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Estudiante actualizado correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {

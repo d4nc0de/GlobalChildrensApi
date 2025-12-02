@@ -177,7 +177,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Asistencia de estudiante actualizada correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {
@@ -202,7 +202,7 @@ namespace GlobalChildrensApi.Controllers
                 asistencia.estado = "INA";
                 await _db.SaveChangesAsync();
 
-                return Ok("Asistencia inactivada correctamente");
+                return Ok(asistencia);
             }
             catch (Exception ex)
             {
@@ -225,7 +225,7 @@ namespace GlobalChildrensApi.Controllers
 
                 _db.asistenciaestudiante.Remove(asistencia);
                 await _db.SaveChangesAsync();
-                return Ok("Asistencia eliminada correctamente");
+                return Ok(asistencia);
             }
             catch (Exception ex)
             {
@@ -503,7 +503,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Nota de estudiante actualizada correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {
@@ -528,7 +528,7 @@ namespace GlobalChildrensApi.Controllers
                 nota.estado = "INA";
                 await _db.SaveChangesAsync();
 
-                return Ok("Asistencia inactivada correctamente");
+                return Ok(nota);
             }
             catch (Exception ex)
             {
@@ -552,7 +552,7 @@ namespace GlobalChildrensApi.Controllers
                 _db.nota.Remove(nota);
                 await _db.SaveChangesAsync();
 
-                return Ok("Asistencia eliminada correctamente");
+                return Ok(nota);
             }
             catch (Exception ex)
             {
@@ -652,7 +652,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Componeten de nota actualizado correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {
@@ -677,7 +677,7 @@ namespace GlobalChildrensApi.Controllers
                 componente.estado = "INA";
                 await _db.SaveChangesAsync();
 
-                return Ok("Componente de nota inactivado correctamente");
+                return Ok(componente);
             }
             catch (Exception ex)
             {
@@ -701,7 +701,7 @@ namespace GlobalChildrensApi.Controllers
                 _db.componentenota.Remove(componente);
                 await _db.SaveChangesAsync();
 
-                return Ok("Componente de nota eliminada correctamente");
+                return Ok(componente);
             }
             catch (Exception ex)
             {
@@ -826,7 +826,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Periodo de evaluacion actualizado correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {
@@ -851,7 +851,7 @@ namespace GlobalChildrensApi.Controllers
                 periodo.estado = "INA";
                 await _db.SaveChangesAsync();
 
-                return Ok("Periodo de evaluacion inactivado correctamente");
+                return Ok(periodo);
             }
             catch (Exception ex)
             {
@@ -875,7 +875,7 @@ namespace GlobalChildrensApi.Controllers
                 _db.periodoevaluacion.Remove(periodo);
                 await _db.SaveChangesAsync();
 
-                return Ok("periodo de evaluacion eliminado correctamente");
+                return Ok(periodo);
             }
             catch (Exception ex)
             {

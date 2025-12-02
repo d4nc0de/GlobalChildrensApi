@@ -20,6 +20,32 @@ namespace GlobalChildrensApi.Controllers
         }
 
         // CRUD de sesiones de clase
+
+        // Obtener todas las sesiones de clase activas
+        [HttpGet("GetAllSesionClase")]
+        public async Task<ActionResult<IEnumerable<SesionClase>>> GetAllSesionClase()
+        {
+            try
+            {
+                var sesiones = await _db.sesionclase
+                    .Where(s => s.estado == "ACT")
+                    .OrderByDescending(s => s.fecha_real)
+                    .ThenBy(s => s.hora_inicio_programada)
+                    .ToListAsync();
+
+                return Ok(sesiones);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    error = "ERROR_SERVIDOR",
+                    message = "No fue posible comunicarse con la base de datos. Intenta de nuevo.",
+                    details = ex.Message
+                });
+            }
+        }
+
         [HttpGet("ObtenerSesionClase/{id:long}")]
         public async Task<ActionResult<SesionClase>> GetSesionClaseById(long id)
         {
@@ -188,7 +214,7 @@ namespace GlobalChildrensApi.Controllers
 
                 await _db.SaveChangesAsync();
 
-                return Ok("Sesion de clase actualizada correctamente");
+                return Ok(existing);
             }
             catch (Exception ex)
             {
@@ -213,7 +239,7 @@ namespace GlobalChildrensApi.Controllers
                 sesion.estado = "INA";
                 await _db.SaveChangesAsync();
 
-                return Ok("Sesion de clase inactivada correctamente");
+                return Ok(sesion);
             }
             catch (Exception ex)
             {
@@ -236,7 +262,7 @@ namespace GlobalChildrensApi.Controllers
 
                 _db.sesionclase.Remove(sesion);
                 await _db.SaveChangesAsync();
-                return Ok("Sesion de clase eliminada correctamente");
+                return Ok(sesion);
             }
             catch (Exception ex)
             {
